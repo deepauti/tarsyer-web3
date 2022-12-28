@@ -163,9 +163,11 @@
 
     .aboutusbgimage {
         background-image: url("../assets/img/about_us.svg");
+        background-repeat: no-repeat;
     }
     .namegamebgimage {
         background-image: url("../assets/img/name_game.svg");
+        background-repeat: no-repeat;
     }
 
     .casestudypara1 {
@@ -222,9 +224,11 @@
     }
     .aboutusbgimage {
         background-image: url("../assets/img/about_us_mobile.svg");
+        background-repeat: no-repeat;
     }
     .namegamebgimage {
         background-image: url("../assets/img/name_game_mobile.svg");
+        background-repeat: no-repeat;
     }
     .casestudypara1 {
         margin-left: -1px;
