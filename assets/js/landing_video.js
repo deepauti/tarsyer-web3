@@ -6,7 +6,7 @@
     // Check if the device is a mobile or desktop
     if (navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i)) {
       // If the device is a mobile, show the mobile image
-      image.src = 'assets/img/LANDING_VIDEO_MOBILE.mp4';
+      image.src = 'assets/img/mobile.mp4';
       // aboutus.src = 'assets/img/about_us_mobile.png';
       // namegame.src = 'assets/img/name_game_mobile.png';
     } else {
