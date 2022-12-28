@@ -1,0 +1,32 @@
+.ls-tn {
+  display: none !important;
+}
+
+.ls-slide {
+  display: block !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  overflow: hidden;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: auto !important;
+  right: auto !important;
+  background: none;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.ls-slide > .ls-layer, .ls-slide > .ls-l, .ls-slide > .ls-bg, .ls-slide > a > .ls-layer, .ls-slide > a > .ls-l, .ls-slide > a > .ls-bg {
+  position: absolute !important;
+  white-space: nowrap;
+}
+
+.ls-wp-fullwidth-container, .ls-wp-fullwidth-helper, .ls-gui-element *, .ls-gui-element, .ls-container, .ls-slide > *, .ls-slide, .ls-wrapper, .ls-layer {
+  box-sizing: content-box !important;
+}
+
+html .ls-tn, body .ls-tn, #ls-global .ls-tn {
+  display: none;
+}
+

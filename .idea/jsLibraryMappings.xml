@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="PROJECT" libraries="{ScrambleTextPlugin, TweenMax, gsap, honeybadger, momentum-slider, normalize, scroll-out, splitting, webcomponents-lite, wheel-indicator}" />
+  </component>
+</project>

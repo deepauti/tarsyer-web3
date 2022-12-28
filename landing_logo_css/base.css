@@ -1,0 +1,271 @@
+@keyframes logo-animation {
+  0% {
+      transform: translate(2000px, 2500px) scale(5);
+      background-color: black;
+  }
+  1%{
+    transform: translate(-40%, 350%) scale(4);
+    background-color: transparent;
+  }
+  33% {
+      transform: translate(-40%, 350%) scale(3);
+    }
+
+
+
+  100% {
+      transform: translate(0%, 0%) scale(1);
+  }
+}
+
+.logo-div>img {
+  animation-duration: 4s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-name: logo-animation;
+}
+
+/*.page_check {*/
+/*  height: 100vh;*/
+/*  width: 100vw;*/
+/*  scroll-snap-align: center;*/
+/*  position: relative;*/
+/*}*/
+/*.container_check {*/
+/*  height: 100vh;*/
+/*  overflow: auto;*/
+/*  overflow-x: hidden;*/
+/*  -ms-scroll-snap-type: y mandatory;*/
+/*      scroll-snap-type: y mandatory;*/
+/*}*/
+
+  .video-section-case-study {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    height: 100%;
+  }
+  .video-section-case-study video {
+    width: 100%;
+
+  }
+  .video-section-case-study .text-case-study {
+    position: absolute;
+    top: 0;
+    left: 31px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    color: #000000;
+    /*font-size: 15px;*/
+    text-align: left;
+    /*text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);*/
+  }
+
+  @media (max-width: 768px) {
+    #text-container {
+      width: 100%;
+      font-size: 1.5rem;
+    }
+  }
+
+  /* Style the navigation bar */
+  .navbar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+  }
+  /* Style the image */
+  .navbar img {
+    height: 70px;
+    margin: 0 auto;
+  }
+
+
+  .cont {
+      height: 90vh;
+      padding-left: 2% !important;
+  }
+  .vdeo {
+          margin-top: 58px;
+          margin-bottom: 12px;
+          object-fit: fill;
+          height: auto;
+
+      }
+  .conts {
+      height: 90vh;
+      padding-right: 2% !important;
+      padding-left: 2% !important;
+  }
+  @media (min-width: 1000px) {
+      .vdeo {
+          height: 94vh;
+          object-fit: fill;
+      }
+      .cont {
+          width: 90% !important;
+      }
+      .conts {
+          float: right;
+          width: 90% !important;
+      }
+      .paras {
+          float: right;
+          width: 60%;
+          text-align: justify;
+  }
+      .para {
+          width: 60%;
+          text-align: justify;
+      }
+  }
+  @media (max-width: 1000px) {
+
+
+
+
+      .conti {
+          /*height: 90vh;*/
+          font-size: 0.6rem;
+          align-items: center;
+          justify-content: left;
+          color: #000000;
+          /*font-size: 15px;*/
+          text-align: left;
+      }
+      .vdeo {
+          margin-top: 30px;
+          margin-bottom: 12px;
+          object-fit: fill;
+          height: auto;
+          <video class="vdeo" width="100%" poster="assets/img/LANDING_VIDEO_3.mp4" autoplay="" loop="" preload="auto" muted="" >
+                <source src="assets/img/LANDING_VIDEO_3.mp4" type="video/webm">
+          </video>
+
+      }
+
+
+  }
+
+  .hemantsection {
+    background-image: url('../assets/img/hemant.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+  }
+
+  @media (min-width: 600px) {
+
+    .aboutusbgimage {
+        background-image: url("../assets/img/about_us.svg");
+    }
+    .namegamebgimage {
+        background-image: url("../assets/img/name_game.svg");
+    }
+
+    .casestudypara1 {
+        margin-left: 10px;
+        margin-right: 249px;
+        text-align: justify;
+    }
+    .casestudypara2 {
+        margin-right: -33px;
+        margin-left: 10px;
+        /*text-align: justify;*/
+        /*font-size: 0.8rem;*/
+        /*margin-top: -35px;*/
+
+    }
+    /*.casestudypara3 {*/
+    /*    margin-left: -1px;*/
+    /*    text-align: justify;*/
+    /*    font-size: 0.8rem;*/
+    /*    margin-top: -35px;*/
+    /*    */
+    /*}*/
+    .casestudytitle {
+        margin-top: -10px;
+
+    }
+    .casestudycont {
+        margin-left: 21px;
+        margin-top: -191px;
+
+    }
+    .casestudysection {
+        margin-top: 191px;
+        padding-bottom: 80px;
+        background: url('../assets/img/cam_projection1.gif') right / contain space, #dfdfdf;
+        background-repeat: no-repeat;
+
+
+    }
+
+
+  }
+
+
+    /*cheking if device is phone */
+
+  @media (max-width: 700px) {
+    .whatwedofont{
+          font-size:1.5rem !important;
+          margin-bottom: 5rem !important;
+    }
+    .hemantsection {
+        height: 56vh !important;
+    }
+    .aboutusbgimage {
+        background-image: url("../assets/img/about_us_mobile.svg");
+    }
+    .namegamebgimage {
+        background-image: url("../assets/img/name_game_mobile.svg");
+    }
+    .casestudypara1 {
+        margin-left: -1px;
+        margin-right: 32px;
+        text-align: justify;
+        font-size: 0.8rem;
+    }
+    .casestudypara2 {
+        margin-right: 32px;
+        margin-left: -1px;
+        text-align: justify;
+        font-size: 0.8rem;
+        margin-top: -61px;
+
+    }
+    .casestudypara3 {
+        margin-left: -1px;
+        text-align: justify;
+        font-size: 0.8rem;
+        margin-top: -35px;
+
+    }
+    .casestudytitle {
+        margin-left: -1px;
+    }
+    .casestudycont {
+        margin-left: 21px;
+        margin-top: 0px;
+        height: 94vh;
+
+    }
+
+    .casestudysection {
+        background: url('../assets/img/cam_projection1.gif') bottom / contain space, #dfdfdf;
+        background-repeat: no-repeat;
+    }
+  }
+
+
+
+
+
+
+

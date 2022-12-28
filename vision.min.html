@@ -1,0 +1,434 @@
+<!DOCTYPE html><html><head><script src="https://ssl.gstatic.com/external_hosted/polymer/v2/webcomponents-lite.js"></script><!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><!--
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+    <title>Vision Demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+  <body><div hidden="" by-vulcanize="">
+<dom-module id="cloud-demo-captcha" assetpath="/cloud_demo_captcha/">
+  <template>
+    <div hidden$="[[!isVisible]]" id="container" style="margin-top: 12px; display: flex; justify-content: center; min-height: 325px;">
+    </div>
+  </template>
+  </dom-module>
+<iron-iconset-svg name="cloud-display-code-icons" size="24">
+<svg><defs>
+<g id="content-copy"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></g>
+<g id="done"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path></g>
+<g id="error"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></g>
+</defs></svg>
+</iron-iconset-svg>
+<dom-module id="cloud-display-code" assetpath="/cloud_display_code/">
+  <template>
+    <style>:host{display:block}pre{background-color:#fff;color:var(--google-grey-500);font-size:14px;line-height:1.4;margin:0;max-height:400px;overflow-y:scroll;padding:12px;white-space:pre-wrap;@apply --paper-font-common-code}.string{color:var(--google-red-700);white-space:normal;word-break:break-all}.string.no-key{white-space:nowrap}.number,.boolean,.null{color:var(--google-blue-700)}.key{color:var(--google-green-700)}.no-key{color:var(--primary-text-color)}label{color:var(--primary-text-color);display:block;font-size:14px;font-weight:500;padding-bottom:8px;@apply --paper-font-common-base}#clickToCopy{background:#bdbdbd;color:#fff;opacity:0;position:absolute;right:15px;top:0;transition:background .2s , opacity .2s;z-index:1}.container{position:relative}.container:hover #clickToCopy{opacity:1}#clickToCopy:hover{background:#757575;opacity:1}</style>
+    <label>
+      [[label]]
+    </label>
+    <div class="container">
+      <pre id="code" on-mousewheel="onMousewheel_"></pre>
+      <paper-icon-button id="clickToCopy" icon$="[[copyIcon]]" on-tap="onCopyToClipboardTap_">
+      </paper-icon-button>
+      <paper-tooltip for="clickToCopy" offset="0">
+        [[copyTooltip]]
+      </paper-tooltip>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="vs-faces" assetpath="/vs_faces/">
+  <template>
+    <style>h1{color:var(--paper-grey-800);font-size:1.3em;font-weight:normal;margin:0;padding-bottom:8px}section+section{margin-top:30px}.type-row+.type-row{margin-top:20px}.confidence{align-items:center;display:flex;flex-wrap:wrap;margin:20px 0 15px}.name{flex-grow:1}.score{text-align:right}.meter{flex-basis:100%;height:4px;margin-top:4px}.angles{display:flex;justify-content:center;margin-top:15px}.value{color:var(--google-green-500);margin-left:6px}.value+.key{margin-left:12px}paper-progress{width:100%}</style>
+    <template is="dom-repeat" items="[[formattedData]]">
+      <section>
+        <template is="dom-if" if="[[item.showHeader]]">
+          <h1>Face [[item.num]]</h1>
+        </template>
+        <template is="dom-repeat" items="[[item.types]]">
+          <div class="type-row">
+            <vs-likeliness label="[[item.friendlyType]]" value="[[item.value]]"></vs-likeliness>
+          </div>
+        </template>
+        <dl class="angles">
+          <dt class="key">Roll: </dt>
+          <dd class="value">[[item.rollAngle]]°</dd>
+          <dt class="key">Tilt: </dt>
+          <dd class="value">[[item.tiltAngle]]°</dd>
+          <dt class="key">Pan:</dt>
+          <dd class="value">[[item.panAngle]]°</dd>
+        </dl>
+        <div class="confidence">
+          <div class="name">Confidence</div>
+          <div class="score">[[item.detectionConfidence]]%</div>
+          <div class="meter">
+            <paper-progress value="[[item.detectionConfidence]]"></paper-progress>
+          </div>
+        </div>
+      </section>
+    </template>
+  </template>
+  </dom-module>
+<dom-module id="vs-image" assetpath="/vs_image/">
+  <template>
+    <style>:host{box-sizing:border-box;display:inline-block;position:relative}img{@apply --shadow-elevation-6dp}canvas,svg{bottom:0;left:0;position:absolute;right:0;top:0}path{transition:stroke-width .25s}</style>
+    <img id="image" src="[[sourceSafe]]" style$="[[getStyles(maxHeight, maxWidth)]]" on-load="onImageLoaded">
+    <canvas height="[[height]]" width="[[width]]" id="canvas">
+    </canvas>
+    <template is="dom-if" if="[[boxPaths]]">
+      <template is="dom-repeat" items="[[boxPaths]]" as="boxPath">
+        <svg height$="[[height]]" width$="[[width]]" viewbox$="0 0 [[width]] [[height]]">
+          <path d$="[[boxPath]]" fill="none" stroke$="[[color]]" style$="[[getStrokeWidth(index, activePathIndex)]]"></path>
+        </svg>
+      </template>
+    </template>
+  </template>
+  </dom-module>
+<dom-module id="vs-labels" assetpath="/vs_labels/">
+  <template>
+    <style>.row{align-items:center;display:flex;flex-wrap:wrap}.row+.row{margin-top:16px}.name{font-size:1.2em}.score{flex-grow:1;text-align:right}.meter{flex-basis:100%;height:4px;margin-top:4px}a{color:var(--google-blue-500);text-decoration:none}paper-progress{width:100%}</style>
+    <template is="dom-repeat" items="[[formattedData]]">
+      <div class="row">
+        <div class="name">
+          <a href="https://www.google.com/search?q=[[item.description]]" target="_blank" title="Search for [[item.description]] on Google">
+            [[item.description]]
+          </a>
+        </div>
+        <div class="score">
+          [[item.score]]%
+        </div>
+        <div class="meter">
+          <paper-progress value="[[item.score]]"></paper-progress>
+        </div>
+      </div>
+    </template>
+  </template>
+  </dom-module>
+<dom-module id="vs-landmarks" assetpath="/vs_landmarks/">
+  <template>
+    <style>.row{align-items:center;display:flex;flex-wrap:wrap}.row+.row{margin-top:24px}.name{font-size:1.2em;padding-bottom:3px}.score{font-size:1.1em;flex-grow:1;text-align:right}.map{flex-basis:100%;margin-top:12px}img{background-color:var(--google-grey-100);max-width:100%}.location{flex-basis:100%;font-size:.65em;margin:4px 0;text-align:center}a{color:var(--google-blue-500);text-decoration:none}</style>
+    <template is="dom-repeat" items="[[formattedData]]">
+      <div class="row">
+        <div class="name">
+          <a href="https://www.google.com/#q=[[item.description]]" target="_blank">
+            [[item.description]]
+          </a>
+        </div>
+        <div class="score">[[item.score]]%</div>
+        <template is="dom-if" if="[[item.map]]">
+          <div class="map">
+            <img src="[[item.map]]">
+          </div>
+        </template>
+        <div class="location">
+          <b>Location</b>: [[item.latText]], [[item.longText]]
+        </div>
+      </div>
+    </template>
+  </template>
+  </dom-module>
+<dom-module id="vs-logos" assetpath="/vs_logos/">
+  <template>
+    <style>.row{align-items:center;display:flex;flex-wrap:wrap}.row+.row{margin-top:16px}.name{font-size:1.2em}a{color:var(--google-blue-500);text-decoration:none}.score{flex-grow:1;text-align:right}.meter{flex-basis:100%;height:4px;margin-top:4px}paper-progress{width:100%}</style>
+    <template is="dom-repeat" items="[[formattedData]]">
+      <div class="row">
+        <div class="name">
+          <a href="https://www.google.com/search?q=[[item.description]]+logos&amp;tbm=isch" target="_blank" title="Search for [[item.description]] on Google Images">
+            [[item.description]]
+          </a>
+        </div>
+        <div class="score">
+          [[item.score]]%
+        </div>
+        <div class="meter">
+          <paper-progress value="[[item.score]]"></paper-progress>
+        </div>
+      </div>
+    </template>
+  </template>
+  </dom-module>
+<dom-module id="vs-objects" assetpath="/vs_objects/">
+  <template>
+    <style>:host{--highlight-padding:-6px}.row+.row{margin-top:20px}.row{align-items:center;display:flex;flex-wrap:wrap;position:relative}.row::before{background-color:var(--paper-green-50);bottom:var(--highlight-padding);content:'';display:block;left:var(--highlight-padding);opacity:0;position:absolute;right:var(--highlight-padding);top:var(--highlight-padding);transition:opacity .15s;z-index:0}.row:hover::before{opacity:1}.name,.score,.meter{position:relative;z-index:1}.name{flex-grow:1}.score{text-align:right}.meter{flex-basis:100%;margin-top:4px}paper-progress{width:100%}</style>
+    <div on-mouseover="onHover" on-click="onHover">
+      <template is="dom-repeat" items="[[formattedData]]">
+        <div class="row" index="[[index]]">
+          <div class="name">
+            [[item.name]]
+          </div>
+          <div class="score">
+            [[item.score]]%
+          </div>
+          <div class="meter">
+            <paper-progress value="[[item.score]]"></paper-progress>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
+  </dom-module>
+<dom-module id="vs-properties" assetpath="/vs_properties/">
+  <template>
+    <style>:host *{box-sizing:border-box}h1{color:var(--paper-grey-800);font-size:1.3em;font-weight:normal;margin:0;padding-bottom:16px}section+section{margin-top:30px}.color-container{height:180px}.color{float:left;display:inline-block;height:100%}.color-row{align-items:center;display:flex;flex-wrap:wrap;margin-top:10px;transition:color 300ms linear}.color-text{font-size:.9em}.color-percent{flex-grow:1;font-size:1.1em;text-align:right}.color-block{flex-basis:100%;height:20px;margin-top:6px;transition:background-color 300ms linear}.crop-row{margin:8px 0;text-align:center}.crop-ratio{font-size:1.1em;margin:5px 0 3px}.crop-image{box-shadow:0 2px 2px 0 rgba(0,0,0,.14) , 0 1px 5px 0 rgba(0,0,0,.12) , 0 3px 1px -2px rgba(0,0,0,.2);height:auto;max-width:85%}</style>
+
+
+    <section>
+      <h1>Dominant Colors</h1>
+      <div class="color-wrapper">
+        <div class="color-container">
+          <template is="dom-repeat" items="[[colors]]">
+            <div class="color" on-mouseover="onColorHover" style$="[[getColorStyle(item.percent, item.hex)]]">
+            </div>
+          </template>
+        </div>
+        <div id="row" class="color-row">
+          <div class="color-text">#[[currentColor.hex]], &nbsp;RGB([[currentColor.rgb]])</div>
+          <div class="color-percent">[[currentColor.percentRounded]]%</div>
+          <div class="color-block" style$="[[getColorStyle(null, currentColor.hex)]]">&nbsp;</div>
+        </div>
+      </div>
+    </section>
+
+
+    <template is="dom-if" if="[[cropHints]]">
+      <section>
+        <h1>Crop Hints</h1>
+        <template is="dom-repeat" items="[[cropHints]]">
+          <div class="crop-row">
+            <div class="crop-ratio">Aspect Ratio: <b>[[item.ratio]]</b></div>
+            <img class="crop-image" src="[[item.imageURI]]">
+          </div>
+        </template>
+      </section>
+    </template>
+
+  </template>
+  </dom-module>
+<dom-module id="vs-likeliness" assetpath="/vs_likeliness/">
+  <template>
+    <style>:host *{box-sizing:border-box}:host{align-items:center;display:flex}.label{font-size:1em;padding-right:12px;width:80px}.meter{background-color:var(--paper-grey-100);flex-grow:1;position:relative}.meter::after{background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 20%,
+    rgba(255,255,255,1) 20%,
+    rgba(255,255,255,1) 21%,
+    rgba(255,255,255,0) 21%,
+    rgba(255,255,255,0) 40%,
+    rgba(255,255,255,1) 40%,
+    rgba(255,255,255,1) 41%,
+    rgba(255,255,255,0) 41%,
+    rgba(255,255,255,0) 60%,
+    rgba(255,255,255,1) 60%,
+    rgba(255,255,255,1) 61%,
+    rgba(255,255,255,0) 61%,
+    rgba(255,255,255,0) 80%,
+    rgba(255,255,255,1) 80%,
+    rgba(255,255,255,1) 81%,
+    rgba(255,255,255,0) 81%
+  );bottom:0;content:'';display:block;left:0;position:absolute;right:0;top:0;z-index:1}.bar{height:15px}.text{font-size:.75em;padding-left:12px;width:100px}</style>
+    <div class="label">[[label]]</div>
+    <div class="meter">
+      <div class="bar" style$="[[style]]"></div>
+    </div>
+    <div class="text">[[text]]</div>
+  </template>
+  </dom-module>
+<dom-module id="vs-safe" assetpath="/vs_safe/">
+  <template>
+    <style>.row+.row{margin-top:20px}.help{color:var(--paper-grey-600);font-size:.8em;padding:30px 20px 0 30px}</style>
+    <template is="dom-repeat" items="[[formattedData]]">
+      <div class="row">
+        <vs-likeliness label="[[item.name]]" value="[[item.score]]"></vs-likeliness>
+      </div>
+    </template>
+    <div class="help">[[helpMessage]]</div>
+  </template>
+  </dom-module>
+<dom-module id="vs-text" assetpath="/vs_text/">
+  <template>
+    <style>fieldset{border:1px solid #dedede;border-radius:4px}legend{border-radius:11px;color:#fff;cursor:pointer;display:inline-block;font-size:1.1em;padding:2px 8px;user-select:none}legend:hover{opacity:.9}legend::before{content:'+'}.collapsed>legend::before{content:'-'}.container{font-size:.95em;max-height:999px;padding-bottom:3px;position:relative;transition:max-height .2s}.collapsed .container{max-height:0;padding:0;overflow:hidden}.page,.block,.paragraph{margin-bottom:10px;padding-left:7px;padding-right:5px}.block{background-color:#edf6f9;margin:8px 0 15px;padding-bottom:2px}.paragraph{background-color:#e7f7e8}.page legend{background-color:#af3b23}.block>legend{background-color:#0288d1}.paragraph>legend{background-color:#4caf50}.word{border-bottom:1px dotted #ffaa0a;color:#000;cursor:default;font-size:1em;margin-left:6px}.word:hover{border-bottom-style:solid}.paragraph>.word:first-child{margin-left:0}.symbol{display:inline-block;padding:0}</style>
+
+    <template is="dom-repeat" items="[[data.pages]]">
+      <fieldset class="page" on-click="onClick">
+        <legend>Page [[increment(index)]]
+          <paper-tooltip position="right">
+            Width: [[item.width]], Height: [[item.height]],
+            <template is="dom-if" if="{{hasLanguage(item)}}">
+              Language: [[getLanguage(item)]]
+            </template>
+          </paper-tooltip>
+        </legend>
+
+
+        <div class="container">
+          <template is="dom-repeat" items="[[item.blocks]]">
+            <fieldset class="block">
+              <legend>Block [[increment(index)]]</legend>
+
+
+              <div class="container">
+                <template is="dom-repeat" items="[[item.paragraphs]]">
+                  <fieldset class="paragraph">
+                    <template is="dom-if" if="{{hasLanguage(item)}}">
+                      <legend>Paragraph [[increment(index)]]
+                        <paper-tooltip>Language: [[getLanguage(item)]]</paper-tooltip>
+                      </legend>
+                    </template>
+
+
+                    <div class="container">
+                      <template is="dom-repeat" items="[[item.words]]">
+                        <span class="word">
+
+
+                          <template is="dom-repeat" items="[[item.symbols]]">
+                            <span class="symbol">[[item.text]]</span>
+                          </template>
+
+
+                          <template is="dom-if" if="{{hasLanguage(item)}}">
+                            <paper-tooltip>Language: [[getLanguage(item)]]</paper-tooltip>
+                          </template>
+                        </span>
+                      </template>
+                    </div>
+
+
+                  </fieldset>
+                </template>
+              </div>
+
+
+            </fieldset>
+          </template>
+        </div>
+
+
+      </fieldset>
+    </template>
+
+
+  </template>
+  </dom-module>
+<dom-module id="vs-app" assetpath="/vs_app/">
+  <template>
+    <style>:host,:host *{box-sizing:border-box}:host{--vs-light-blue:#f3fbfe;color:var(--google-grey-700);display:block;font-family:Roboto,Arial,serif;font-size:1em;margin:0 auto;max-width:800px;padding:20px 10px 24px;position:relative}.spinner-container{bottom:0;left:0;position:absolute;right:0;top:0}paper-card{max-height:454px;margin-left:25px;overflow:auto;padding:18px;width:400px}paper-spinner{height:60px;left:50%;position:absolute;top:50%;transform:translate(-50%,-50%);width:60px}h1{font-size:1.25em;font-weight:bold;margin:0 0 24px;padding:0;text-align:center}.dropzone-label{bottom:0;cursor:pointer;left:0;opacity:0;overflow:hidden;position:absolute;right:0;top:0}.dropzone{border:2px dashed var(--google-grey-500);border-radius:3px;background:var(--google-grey-100) right 20px center no-repeat;background-image:url(data:image/png;base64,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);cursor:pointer;min-height:150px;position:relative;transition:background-color ease .5s , border-color ease .5s;width:100%}.dropzone:hover,.dropzone.hover{background-color:var(--paper-light-blue-50);border:2px dashed var(--google-blue-500)}.dropzone-text{font-size:1.2em;line-height:1.5em;padding-right:150px}.dropzone-text-mobile{display:none;padding-top:10px;text-align:center}.preview{position:relative;text-align:center}.preview.loading vs-image{opacity:.25}.image-name{bottom:0;font-size:.8em;font-weight:bold;overflow:hidden;padding-top:4px;position:absolute;text-align:center;text-overflow:ellipsis;transform:translateY(100%);white-space:nowrap;width:100%}.center-all,.center-horizontal{display:flex;justify-content:center}.center-all{align-items:center}[hidden]{display:none!important}.json{background-color:var(--vs-light-blue);display:flex;flex-wrap:wrap;margin:0 0 16px;min-height:auto;width:100%}.json .url{flex-basis:100%}.json .request,.json .response{width:50%}.json .request{padding-right:12px}.json .response{padding-left:12px}.controls{margin-top:36px}cloud-display-code{display:block}.json cloud-display-code+cloud-display-code{margin-top:12px}.show-json{align-items:center;background:none;border:none;color:var(--google-blue-500);cursor:pointer;display:flex;margin:0;padding:8px 0;@apply --paper-font-body1}.show-json:hover{color:var(--google-blue-700)}.buttons{align-items:center;display:flex;justify-content:space-between}paper-button iron-icon{margin:0 6px 0 8px}paper-button .label{margin-right:14px}.reset{background:var(--paper-grey-100);color:var(--paper-grey-700)}.choose-new{background:var(--google-blue-500);color:#fff;margin:0}@media (max-width:768px){:host,h1,.dropzone,.preview,iron-pages,.dropzone-text-mobile,.center-all,.center-horizontal{display:block;width:auto}.dropzone{background-position:center center;min-height:250px}.dropzone-text{display:none}paper-card{margin:36px 0 0;min-height:auto;width:100%}.controls{margin-top:16px}.json{flex-direction:row}.json .request,.json .response{width:100%}.json .request{padding-right:0}.json .response{padding-left:0}}@media (max-width:480px){.buttons{flex-wrap:wrap}.buttons>div{flex-basis:100%}.buttons>div:last-child{display:flex}.buttons>div:last-child>*{flex-basis:50%}.buttons label paper-button{width:100%}.show-json{display:none}}paper-tabs{--paper-tabs-selection-bar-color:var(--google-blue-500);--paper-tabs-selection-bar: {
+    border-bottom-width: 3px;
+  };--paper-tabs: {
+    border-bottom: 1px solid var(--google-grey-300);
+    margin: 15px 0;
+    width: 100%;
+  }}:host{--paper-tab-ink:#bbb}</style>
+    <h1>[[titleText]]</h1>
+    <template is="dom-if" if="[[!showPreview]]">
+      <div class="center-all">
+        <div class$="dropzone center-all [[getDropzoneHoverClass(isDropzoneActive)]]" on-drag="onDrag" on-dragstart="onDrag" on-dragenter="onDragEnter" on-dragover="onDragEnter" on-dragend="onDragEnd" on-dragleave="onDragEnd" on-drop="onDrop">
+          <div class="dropzone-text">
+            Drag image file here or<br>Browse from your computer
+          </div>
+          <div class="dropzone-text-mobile">
+            Upload your image
+          </div>
+          <label class="dropzone-label" for="input" on-click="onUploadButtonClick"></label>
+          <input type="file" id="input" on-change="onFileUpload" hidden="">
+        </div>
+      </div>
+    </template>
+
+    <paper-tabs id="tabs" hidden="[[!showResults]]" autoselect="true" selected="{{selectedResultIndex}}" on-iron-activate="onTabActivate">
+      <template is="dom-repeat" items="[[resultTypes]]" as="resultType">
+        <paper-tab id="[[resultType.id]]" hidden="[[!resultType.isVisible]]" label="[[resultType.name]]">
+          [[resultType.label]]
+        </paper-tab>
+      </template>
+    </paper-tabs>
+
+    <div class="wrapper center-all">
+      <template is="dom-if" if="[[showPreview]]">
+        <div class$="preview [[getPreviewClass(showLoading)]]">
+          <vs-image active-path-index="[[activePathIndex]]" crop-hints="{{cropHints}}" height="{{imageHeight}}" result-type="[[resultTypeActive]]" result-data="[[resultData]]" source="[[imageSource]]">
+          </vs-image>
+          <div class="image-name">[[currentFile.name]]</div>
+        </div>
+      </template>
+      <paper-card style$="[[getCardMaxHeight(imageHeight)]]" hidden="[[!showResults]]">
+        <iron-pages selected="[[selectedResultIndex]]">
+          <vs-landmarks data="[[resultData.landmarkAnnotations]]"></vs-landmarks>
+          <vs-faces data="[[resultData.faceAnnotations]]"></vs-faces>
+          <vs-objects data="[[resultData.localizedObjectAnnotations]]" active-path-index="{{activePathIndex}}"></vs-objects>
+          <vs-labels data="[[resultData.labelAnnotations]]"></vs-labels>
+          <vs-logos data="[[resultData.logoAnnotations]]"></vs-logos>
+          <vs-text data="[[resultData.fullTextAnnotation]]"></vs-text>
+          <vs-properties data="[[resultData.imagePropertiesAnnotation]]" crop-hints="[[cropHints]]"></vs-properties>
+          <vs-safe data="[[resultData.safeSearchAnnotation]]"></vs-safe>
+        </iron-pages>
+      </paper-card>
+    </div>
+
+    <template is="dom-if" if="[[showResults]]">
+      <div class="controls">
+        <template is="dom-if" if="[[showJson]]">
+          <paper-card class="json">
+            <cloud-display-code class="url" code="[[urlService]]" label="Request URL">
+            </cloud-display-code>
+            <cloud-display-code class="request" code="[[scrubRequest(requestObject)]]" label="Request">
+            </cloud-display-code>
+            <cloud-display-code class="response" code="[[responseObject]]" label="Response">
+            </cloud-display-code>
+          </paper-card>
+        </template>
+        <div class="buttons">
+          <div>
+            <button class="show-json" on-click="onShowJsonClick">
+              <span class="label">[[getShowJsonString(showJson)]]</span>
+              <span class="icon">
+                <iron-icon icon="[[getShowJsonIcon(showJson)]]"></iron-icon>
+              </span>
+            </button>
+          </div>
+          <div>
+            <paper-button class="reset" on-click="reset">
+              <iron-icon icon="av:replay"></iron-icon>
+              <span class="label">Reset</span>
+            </paper-button>
+            <label for="input">
+              <paper-button class="choose-new" on-click="onUploadButtonClick">
+                <iron-icon icon="file-upload"></iron-icon>
+                <span class="label">New file</span>
+              </paper-button>
+            </label>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template is="dom-if" if="[[showLoading]]">
+      <div class="spinner-container">
+        <paper-spinner active=""></paper-spinner>
+      </div>
+    </template>
+
+    <template is="dom-if" if="[[showCaptcha]]">
+      <cloud-demo-captcha parent-node-selector="vs-app" captcha-loaded="{{captchaLoaded}}" captcha-token="{{captchaToken}}" is-visible="{{showCaptcha}}">
+      </cloud-demo-captcha>
+    </template>
+
+  </template>
+  </dom-module>
+<style>body{margin:0;padding:0}</style></div>
+    <vs-app></vs-app>
+
+
+
+<script src="vision.min.js"></script></body></html>
