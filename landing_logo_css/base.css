@@ -265,6 +265,10 @@
         background: url('../assets/img/cam_projection1.gif') bottom / contain space, #dfdfdf;
         background-repeat: no-repeat;
     }
+    
+    .remove_patch {
+        overflow: hidden !important;
+    }
   }
 
 
