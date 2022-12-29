@@ -25,7 +25,7 @@
         'Tarsyer Warehouse Manager',
         'Tarsyer Safety Manager',
         'Tarsyer Store Manager',
-        'Tarsyer Bank Contraller'
+        'Tarsyer Bank Controller'
     ];
     var msTitles = new MomentumSlider({
         el: slidersContainer,
